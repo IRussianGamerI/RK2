@@ -10,6 +10,7 @@ public:
 
 	void ping()
 	{
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     	std::unique_lock<std::mutex> lock(m_);
     	while (count_.load() < MAX)
     	{
@@ -25,10 +26,10 @@ public:
     	std::unique_lock<std::mutex> lock(m_);
     	while (count_.load() < MAX)
     	{
+            cv_.wait(lock);
         	std::cout << "Pong" << std::endl;
         	count_++;
         	cv_.notify_all();
-        	cv_.wait(lock);
     	}
 	}
 
